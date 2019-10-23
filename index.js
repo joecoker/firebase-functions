@@ -1,9 +1,9 @@
 const firebase = require('firebase');
 
 firebase.initializeApp({
-  apiKey: "AIzaSyBR6q0WIss2eatXaYwhcYhNKFT4pYZYJzY",
-  authDomain: "where-is-the-money-from.firebaseapp.com",
-  projectId: "where-is-the-money-from"
+  apiKey: '',
+  authDomain: '',
+  projectId: ''
 })
 
 const db = firebase.firestore();
