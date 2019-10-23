@@ -82,7 +82,7 @@ const formatPoliticianObject = (politician) => {
         yearElected: 2017,
         photoID: politicianDetails.photoId,
         interests: {
-          donationsAndSupport: Interests.calculateDonations(politician)
+          donationsAndSupport: Interests.calculateDonations(politician.category)
           }
       }
   
