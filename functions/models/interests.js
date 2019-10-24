@@ -13,17 +13,53 @@ class Interests {
 
     const donations = {
       byPartySupport: {
-        totalAmount: this.sumAmount(),
-        record: this.formatPartySupport(),
+        // record: this.formatPartySupport(),
+        totalAmount: 'this.sumAmount()'
       }, 
       otherSupport: {
-        totalAmount: this.sumAmount(),
-        record: this.formatOtherSupport()
+        record: this.formatOtherSupport(otherSupport.record[0].item),
+        totalAmount: 'this.sumAmount()'
       },
-      totalAmount: this.sumAmount()
+      totalAmount: 'this.sumAmount()'
     }
-
     return donations
+  }
+
+  static formatOtherSupport(record) {
+    let donationsRecord = [];
+    record.forEach(donation => {
+      if ('span' in donation) {
+        donationsRecord.push(this.createOtherDonorObject(donation.span[0]))
+      } else if ('strong' in donation) {
+        donationsRecord.push(this.createOtherDonorObject(donation.strong[0].em[0]))
+      } else {
+        donationsRecord.push(this.createOtherDonorObject(donation))
+      }
+    })
+  }
+
+  static createOtherDonorObject(donation) {
+    const donorObject = {
+      donorName: donation['_'].replace('Name of donor: ', ''),
+      address: donation.br[0].replace('Address of donor: ', ''),
+      amountPence: this.getAmountPence(donation.br[1]),
+      dateRecieved: donation.br[2].replace('Date received: ', ''),
+      dateAccepted: donation.br[3].replace('Date accepted: ', ''),
+      status: donation.br[4].replace('Donor status: ', '')
+    }
+    // console.log(donorObject)
+    // return donorObject
+  }
+
+  static getAmountPence(amountString) {
+    const noCommas = amountString.replace(/,/g, '')
+    const amount = noCommas.match(/[0-9]+/g);
+    console.log(amount)
+    if (amount === null) {
+      return null;
+    } else {
+      return;
+    }
   }
 }
 
