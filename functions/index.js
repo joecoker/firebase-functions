@@ -54,13 +54,13 @@ const convertXMLsToDonationsJson = async (date) => {
       parseString(string, { trim: true }, (err, result) => {
         try {
           // Boris Johnson
-          formatPoliticianObject(result.publicwhip.regmem[316]);
+          // formatPoliticianObject(result.publicwhip.regmem[316]);
 
 
-          // result.publicwhip.regmem.forEach(politician => {
-          //   const politicianJson = formatPoliticianObject(politician)
-          //   politicians.push(politicianJson)
-          // });
+          result.publicwhip.regmem.forEach(politician => {
+            const politicianJson = formatPoliticianObject(politician)
+            politicians.push(politicianJson)
+          });
 
         } catch (error) {
           console.log(err);
@@ -75,6 +75,7 @@ const convertXMLsToDonationsJson = async (date) => {
 const formatPoliticianObject = (politician) => {
   try {
       const politicianDetails = new Politician(politician['$'].membername);
+      console.log(politician['$'].membername)
       let formatPoliticianObj = {
         name: politician['$'].membername,
         party: politicianDetails.party,

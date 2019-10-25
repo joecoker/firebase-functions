@@ -2,27 +2,59 @@
 
 class Interests {
   static calculateDonations(polInterests) {
-
-    const byPartySupport = polInterests.find(interests => {
-      return interests['$'].name === '(a) Support linked to an MP but received by a local party organisation or indirectly via a central party organisation'
-    });
-
-    const otherSupport = polInterests.find(interests => {
-      return interests['$'].name === '(b) Any other support not included in Category 2(a)'
-    });
-
-    const donations = {
+    let donations = {
       byPartySupport: {
-        // record: this.formatPartySupport(),
-        totalAmount: 'this.sumAmount()'
-      }, 
-      otherSupport: {
-        record: this.formatOtherSupport(otherSupport.record[0].item),
-        totalAmount: 'this.sumAmount()'
+        record: [],
+        totalAmount: 0,
       },
-      totalAmount: 'this.sumAmount()'
+      otherSupport: {
+        record: [],
+        totalAmount: 0,
+      },
+      totalAmount: 0
+    }
+    
+    if (polInterests) {
+      const byPartySupport = polInterests.find(interests => {
+        return interests['$'].name === '(a) Support linked to an MP but received by a local party organisation or indirectly via a central party organisation'
+      });
+
+      if (byPartySupport) {
+        donations.byPartySupport = {
+          record: this.formatPartySupport(byPartySupport.record[0].item),
+          totalAmount: 0
+        }
+      }
+
+      const otherSupport = polInterests.find(interests => {
+        return interests['$'].name === '(b) Any other support not included in Category 2(a)'
+      });
+
+      if (otherSupport) {
+        donations.otherSupport = {
+          record: this.formatOtherSupport(otherSupport.record[0].item),
+          totalAmount: 0,
+        }
+        donations.otherSupport.totalAmount = this.sumAmount(donations.otherSupport.record)
+      }
     }
     return donations
+  }
+
+  static sumAmount(record) {
+    return record.reduce((accumulator, donation) => {
+      return accumulator += donation.amountPence
+    }, 0);
+  }
+
+  static formatPartySupport(record) {
+    let donationsRecord = [];
+    record.forEach(donation => {
+      if(typeof donation === 'string') {
+        console.log('YYYOO')
+        console.log(donation);
+      }
+    });
   }
 
   static formatOtherSupport(record) {
@@ -36,6 +68,7 @@ class Interests {
         donationsRecord.push(this.createOtherDonorObject(donation))
       }
     })
+    return donationsRecord;
   }
 
   static createOtherDonorObject(donation) {
@@ -47,18 +80,18 @@ class Interests {
       dateAccepted: donation.br[3].replace('Date accepted: ', ''),
       status: donation.br[4].replace('Donor status: ', '')
     }
-    // console.log(donorObject)
-    // return donorObject
+    return donorObject
   }
 
   static getAmountPence(amountString) {
-    const noCommas = amountString.replace(/,/g, '')
-    const amount = noCommas.match(/[0-9]+/g);
-    console.log(amount)
-    if (amount === null) {
+    const addPoundSign = amountString.replace(/[\uFFFD]/g, '£');
+    const noCommas = addPoundSign.replace(/,/g, '');
+    const amountPounds = noCommas.match(/£[0-9]+/g);
+    const amountPence = parseInt(amountPounds[amountPounds.length - 1].replace('£','')) * 100;
+    if (amountPence === null) {
       return null;
     } else {
-      return;
+      return amountPence;
     }
   }
 }

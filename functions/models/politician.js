@@ -6,7 +6,7 @@ class Politician {
   constructor (name) {
     this.details = this.findPoliticianDetails(name),
     this.party = this.details.mpParty,
-    this.constituency = this.details.mpConstituency,
+    this.constituency = this.details.mpConstituency, 
     this.photoId = this.findPhotoId(name)
   }
 
