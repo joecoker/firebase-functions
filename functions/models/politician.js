@@ -5,8 +5,6 @@ const photoIds = require('../politician-data/photoIds.json');
 class Politician {
   constructor (name) {
     this.details = this.findPoliticianDetails(name),
-    this.party = this.details.mpParty,
-    this.constituency = this.details.mpConstituency, 
     this.photoId = this.findPhotoId(name)
   }
 
@@ -20,8 +18,15 @@ class Politician {
     const politician = photoIds.find(politicianObj => {
       return politicianObj.name === name;
     });
-
     return politician ? politician.id : undefined;
+  }
+
+  get party() {
+    return this.details ? this.details.mpParty : undefined
+  }
+
+  get constituency() {
+    return this.details ? this.details.mpConstituency : undefined
   }
 }
 

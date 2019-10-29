@@ -75,7 +75,6 @@ const convertXMLsToDonationsJson = async (date) => {
 const formatPoliticianObject = (politician) => {
   try {
       const politicianDetails = new Politician(politician['$'].membername);
-      console.log(politician['$'].membername)
       let formatPoliticianObj = {
         name: politician['$'].membername,
         party: politicianDetails.party,
